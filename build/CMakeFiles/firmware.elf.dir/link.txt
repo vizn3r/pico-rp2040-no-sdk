@@ -1,1 +1,0 @@
-arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Wall -Wextra -O2 -fno-builtin -T /home/vizn3r/dev/pico-vina/linker.ld -nostdlib -Wl,-Map=output.map -Wl,--dependency-file=CMakeFiles/firmware.elf.dir/link.d CMakeFiles/firmware.elf.dir/boot2_checked.S.o CMakeFiles/firmware.elf.dir/vectors.S.o CMakeFiles/firmware.elf.dir/startup.c.o CMakeFiles/firmware.elf.dir/main.c.o -o firmware.elf

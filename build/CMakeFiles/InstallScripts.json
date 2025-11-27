@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/vizn3r/dev/pico-vina/build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
