@@ -21,7 +21,7 @@ set(CMAKE_ASM_FLAGS "${CPU_FLAGS}")
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/linker.ld")
 set(CMAKE_EXE_LINKER_FLAGS "-T ${LINKER_SCRIPT} -nostdlib -Wl,-Map=output.map")
 
-add_executable(firmware.elf boot2_checked.S vectors.S startup.c main.c)
+add_executable(firmware.elf boot/boot2_checked.S boot/vectors.S src/startup.c src/main.c)
 
 add_custom_command(TARGET firmware.elf POST_BUILD
   COMMAND ${CMAKE_OBJCOPY} -O binary firmware.elf firmware.bin
