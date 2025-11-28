@@ -1,6 +1,8 @@
 # RPI PI Pico Baremetal
 
-*...without SDK*
+*...without Pico SDK*
+<br>
+***...without C stdlib***
 
 ### Why
 
@@ -22,3 +24,4 @@
 - Some form of a executable format
 - Simple, minimal kernel for syscalls
 - Memory manager
+- Semi-custom stdlib (malloc, free, printf, scanf...)
