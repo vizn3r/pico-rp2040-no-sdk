@@ -12,7 +12,7 @@
 
 ### Current features:
 
-- Not working QSPI :D
+- ~Not~ Working QSPI Flash :D
 - LED blink
 - ...
 
