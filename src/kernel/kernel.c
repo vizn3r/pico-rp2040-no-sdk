@@ -1,6 +1,6 @@
 #include "kernel.h"
-#include "../serial/usb.c"
-#include "gpio.h"
+#include "../regs/gpio.h"
+#include "../serial/usb.h"
 #include <stdint.h>
 
 static int strlen(const char *s) {

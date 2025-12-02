@@ -4,8 +4,11 @@
 #include <stdint.h>
 #include <sys/types.h>
 
+uint8_t s_usb_cdc_recv_buff[64];
+uint16_t s_usb_cdc_recv_buff_len;
+
 void s_usb_init_blocking(void) {
-  HW_RESETS_RESET(HW_RESETS_RESET_OFFSET_USBCTL);
+  HW_RESETS_RESET_CLR(HW_RESETS_RESET_OFFSET_USBCTRL);
   while (!HW_RESETS_RESET_DONE_OK(HW_RESETS_RESET_OFFSET_USBCTRL))
     ;
 
@@ -29,6 +32,8 @@ void s_usb_init_blocking(void) {
   S_USB_REG_INTE.setup_req = 1;
   S_USB_REG_INTE.buff_status = 1;
   S_USB_REG_INTE.bus_reset = 1;
+
+  S_USB_REG_SIE_CTRL.pullup_en = 1;
 }
 
 void s_usb_irq_handle(void) {
@@ -49,7 +54,7 @@ void s_usb_irq_handle(void) {
     S_USB_REG_SIE_STATUS.setup_rec = 1;
     switch (packet->bRequest) {
     case 0x05: // SES_ADDRESS
-      S_USB_REG_ADDR_ENDP.address = packet->wValue * 0x7F;
+      S_USB_REG_ADDR_ENDP.address = packet->wValue & 0x7F;
 
       S_USB_DPSRAM_EP_IN_BUFF_CTRL(0) = 0x80000000;
       break;
@@ -163,7 +168,7 @@ void s_usb_cdc_send(const uint8_t *data, uint16_t len) {
     ep2_in_buf[i] = data[i];
   }
 
-  S_USB_DPSRAM_EP_IN_BUFF_CTRL(2);
+  S_USB_DPSRAM_EP_IN_BUFF_CTRL(2) = len | (1 << 15) | (1 << 31);
 }
 
 uint16_t s_usb_cdc_recv(uint8_t *data, uint16_t max_len) {

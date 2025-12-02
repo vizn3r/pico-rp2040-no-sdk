@@ -29,10 +29,10 @@ add_subdirectory(src/hal)
 add_executable(firmware.elf
   boot/boot2_checked.S
   boot/vectors.S
-
   src/startup.c
-  src/kernel/kernel.c
 )
+
+target_link_libraries(firmware.elf kernel serial hal)
 
 add_custom_command(TARGET firmware.elf POST_BUILD
   COMMAND ${CMAKE_OBJCOPY} -O binary firmware.elf firmware.bin

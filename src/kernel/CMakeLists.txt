@@ -1,3 +1,3 @@
-add_library(kernek OBJECT
+add_library(kernel OBJECT
   kernel.c
 )

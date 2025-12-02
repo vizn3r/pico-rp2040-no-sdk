@@ -20,8 +20,8 @@ typedef struct {
   uint16_t wLenght;
 } __attribute__((packed)) s_usb_setup_packet_t;
 
-uint8_t s_usb_cdc_recv_buff[64];
-uint16_t s_usb_cdc_recv_buff_len;
+extern uint8_t s_usb_cdc_recv_buff[64];
+extern uint16_t s_usb_cdc_recv_buff_len;
 
 static const uint8_t device_descriptor[] = {
     18,         // bLength
