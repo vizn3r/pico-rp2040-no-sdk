@@ -1,35 +1,35 @@
 #include "../regs/gpio.h"
 #include <stdint.h>
 
-void hw_gpio_enable_led() {
-  HW_RESETS_RESET_CLR(HW_RESETS_RESET_OFFSET_IO_BANK0);
-  HW_RESETS_RESET_CLR(HW_RESETS_RESET_OFFSET_PADS_BANK0);
+void gpio_enable_led() {
+  RESETS_RESET_CLR(RESETS_RESET_OFFSET_IO_BANK0);
+  RESETS_RESET_CLR(RESETS_RESET_OFFSET_PADS_BANK0);
 
-  while (!HW_RESETS_RESET_DONE_OK(HW_RESETS_RESET_OFFSET_IO_BANK0))
+  while (!RESETS_RESET_DONE_OK(RESETS_RESET_OFFSET_IO_BANK0))
     ;
-  while (!HW_RESETS_RESET_DONE_OK(HW_RESETS_RESET_OFFSET_PADS_BANK0))
+  while (!RESETS_RESET_DONE_OK(RESETS_RESET_OFFSET_PADS_BANK0))
     ;
 
-  HW_GPIO_CTRL(HW_LED_GPIO) = 5;
-  HW_SIO_GPIO_OE_SET(HW_LED_GPIO);
+  GPIO_CTRL(LED_GPIO) = 5;
+  SIO_GPIO_OE_SET(LED_GPIO);
 }
 
-void hw_gpio_led_blink(uint16_t n) {
+void gpio_led_blink(uint16_t n) {
   for (uint16_t i = 0; i < n; i++) {
-    HW_SIO_GPIO_OUT_SET(HW_LED_GPIO);
+    SIO_GPIO_OUT_SET(LED_GPIO);
     for (uint16_t i = 0; i < 1e5; i++)
       ;
 
-    HW_SIO_GPIO_OUT_CLR(HW_LED_GPIO);
+    SIO_GPIO_OUT_CLR(LED_GPIO);
   }
 }
 
-void hw_gpio_led_blink_fast(uint16_t n) {
+void gpio_led_blink_fast(uint16_t n) {
   for (uint16_t i = 0; i < n; i++) {
-    HW_SIO_GPIO_OUT_SET(HW_LED_GPIO);
+    SIO_GPIO_OUT_SET(LED_GPIO);
     for (uint16_t i = 0; i < 1e4; i++)
       ;
 
-    HW_SIO_GPIO_OUT_CLR(HW_LED_GPIO);
+    SIO_GPIO_OUT_CLR(LED_GPIO);
   }
 }

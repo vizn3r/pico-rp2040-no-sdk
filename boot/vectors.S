@@ -29,7 +29,7 @@ vector_table:
   .word hang              // IRQ2 TIMER_IRQ_2
   .word hang              // IRQ3 TIMER_IRQ_3
   .word hang              // IRQ4 PWM_IRQ_WRAP
-  .word s_usb_irq_handle  // IRQ5 USBCTL_IRQ
+  .word usb_irq_handle    // IRQ5 USBCTL_IRQ
   .word hang              // IRQ6 XIP_IRQ
   .word hang              // IRQ7 PIO0_IRQ_0
   .word hang              // IRQ8 PIO0_IRQ_1

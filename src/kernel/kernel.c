@@ -11,16 +11,16 @@ static int strlen(const char *s) {
 }
 
 int kernel_main(void) {
-  hw_gpio_enable_led();
+  gpio_enable_led();
 
-  hw_gpio_led_blink_fast(3);
+  gpio_led_blink_fast(3);
 
-  s_usb_init_blocking();
+  usb_init_blocking();
   const char *data = "Hello world!";
   while (1) {
     for (volatile int i = 0; i < 1e6; i++)
       ;
-    s_usb_cdc_send((const uint8_t *)data, strlen(data));
+    usb_cdc_send((const uint8_t *)data, strlen(data));
   }
 
   return 0;
