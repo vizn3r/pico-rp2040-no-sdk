@@ -1,4 +1,4 @@
-# RPI PI Pico Baremetal
+# RPI PI Pico Bare bones
 
 *...without Pico SDK*
 <br>
