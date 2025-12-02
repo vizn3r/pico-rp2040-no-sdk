@@ -31,10 +31,10 @@
 // 0x00
 typedef union {
   struct {
-    uint32_t : 12;
-    uint32_t endpoint : 4;
-    uint32_t : 9;
     uint32_t address : 7;
+    uint32_t : 9;
+    uint32_t endpoint : 4;
+    uint32_t : 12;
   };
   uint32_t raw;
 } s_usb_reg_addr_endp_t;
@@ -42,9 +42,9 @@ typedef union {
 // 0x40
 typedef union {
   struct {
-    uint32_t controller_en : 1;
-    uint32_t host_ndevice : 1;
     uint32_t : 30;
+    uint32_t host_ndevice : 1;
+    uint32_t controller_en : 1;
   };
   uint32_t raw;
 } s_usb_reg_main_ctrl_t;
@@ -52,34 +52,34 @@ typedef union {
 // 0x4c
 typedef union {
   struct {
-    uint32_t ep0_int_stall : 1;
-    uint32_t ep0_double_buf : 1;
-    uint32_t ep0_int_1buf : 1;
-    uint32_t ep0_int_2buf : 1;
-    uint32_t ep0_int_nak : 1;
-    uint32_t direct_en : 1;
-    uint32_t direct_dp : 1;
-    uint32_t direct_dm : 1;
-    uint32_t : 5;
-    uint32_t transceiver_pd : 1;
-    uint32_t rpu_opt : 1;
-    uint32_t pullup_en : 1;
-    uint32_t pulldown_en : 1;
-    uint32_t : 1;
-    uint32_t reset_bus : 1;
-    uint32_t resume : 1;
-    uint32_t vbus_en : 1;
-    uint32_t keep_alive_en : 1;
-    uint32_t sof_en : 1;
-    uint32_t sof_sync : 1;
+    uint32_t start_trans : 1;
+    uint32_t send_setup : 1;
+    uint32_t send_data : 1;
+    uint32_t receive_data : 1;
+    uint32_t stop_trans : 1;
     uint32_t : 1;
     uint32_t preamble_en : 1;
     uint32_t : 1;
-    uint32_t stop_trans : 1;
-    uint32_t receive_data : 1;
-    uint32_t send_data : 1;
-    uint32_t send_setup : 1;
-    uint32_t start_trans : 1;
+    uint32_t sof_sync : 1;
+    uint32_t sof_en : 1;
+    uint32_t keep_alive_en : 1;
+    uint32_t vbus_en : 1;
+    uint32_t resume : 1;
+    uint32_t reset_bus : 1;
+    uint32_t : 1;
+    uint32_t pulldown_en : 1;
+    uint32_t pullup_en : 1;
+    uint32_t rpu_opt : 1;
+    uint32_t transceiver_pd : 1;
+    uint32_t : 5;
+    uint32_t direct_dm : 1;
+    uint32_t direct_dp : 1;
+    uint32_t direct_en : 1;
+    uint32_t ep0_int_nak : 1;
+    uint32_t ep0_int_2buf : 1;
+    uint32_t ep0_int_1buf : 1;
+    uint32_t ep0_double_buf : 1;
+    uint32_t ep0_int_stall : 1;
   };
   uint32_t raw;
 } s_usb_reg_sie_ctrl_t;
@@ -87,28 +87,28 @@ typedef union {
 // 0x50
 typedef union {
   struct {
-    uint32_t data_seq_error : 1;
-    uint32_t ack_rec : 1;
-    uint32_t stall_rec : 1;
-    uint32_t nak_rec : 1;
-    uint32_t rx_timeout : 1;
-    uint32_t rx_overflow : 1;
-    uint32_t bit_stuff_error : 1;
-    uint32_t crc_error : 1;
-    uint32_t : 4;
-    uint32_t bus_reset : 1;
-    uint32_t trans_complete : 1;
-    uint32_t setup_rec : 1;
-    uint32_t connected : 1;
-    uint32_t reserved : 1;
-    uint32_t resume : 1;
-    uint32_t vbus_over_curr : 1;
-    uint32_t speed : 1;
-    uint32_t : 3;
-    uint32_t suspended : 1;
-    uint32_t line_state : 1;
-    uint32_t : 1;
     uint32_t vbus_detected : 1;
+    uint32_t : 1;
+    uint32_t line_state : 1;
+    uint32_t suspended : 1;
+    uint32_t : 3;
+    uint32_t speed : 1;
+    uint32_t vbus_over_curr : 1;
+    uint32_t resume : 1;
+    uint32_t reserved : 1;
+    uint32_t connected : 1;
+    uint32_t setup_rec : 1;
+    uint32_t trans_complete : 1;
+    uint32_t bus_reset : 1;
+    uint32_t : 4;
+    uint32_t crc_error : 1;
+    uint32_t bit_stuff_error : 1;
+    uint32_t rx_overflow : 1;
+    uint32_t rx_timeout : 1;
+    uint32_t nak_rec : 1;
+    uint32_t stall_rec : 1;
+    uint32_t ack_rec : 1;
+    uint32_t data_seq_error : 1;
   };
   uint32_t raw;
 } s_usb_reg_sie_status_t;
@@ -116,47 +116,47 @@ typedef union {
 // 0x54
 typedef union {
   struct {
-    uint32_t : 16;
-    uint32_t int_ep_active : 15;
     uint32_t : 1;
+    uint32_t int_ep_active : 15;
+    uint32_t : 16;
   };
 } s_usb_reg_int_ep_ctrl_t;
 
 // 0x58
 typedef union {
   struct {
-    uint32_t ep15_out : 1;
-    uint32_t ep15_in : 1;
-    uint32_t ep14_out : 1;
-    uint32_t ep14_in : 1;
-    uint32_t ep13_out : 1;
-    uint32_t ep13_in : 1;
-    uint32_t ep12_out : 1;
-    uint32_t ep12_in : 1;
-    uint32_t ep11_out : 1;
-    uint32_t ep11_in : 1;
-    uint32_t ep10_out : 1;
-    uint32_t ep10_in : 1;
-    uint32_t ep9_out : 1;
-    uint32_t ep9_in : 1;
-    uint32_t ep8_out : 1;
-    uint32_t ep8_in : 1;
-    uint32_t ep7_out : 1;
-    uint32_t ep7_in : 1;
-    uint32_t ep6_out : 1;
-    uint32_t ep6_in : 1;
-    uint32_t ep5_out : 1;
-    uint32_t ep5_in : 1;
-    uint32_t ep4_out : 1;
-    uint32_t ep4_in : 1;
-    uint32_t ep3_out : 1;
-    uint32_t ep3_in : 1;
-    uint32_t ep2_out : 1;
-    uint32_t ep2_in : 1;
-    uint32_t ep1_out : 1;
-    uint32_t ep1_in : 1;
-    uint32_t ep0_out : 1;
     uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t ep1_in : 1;
+    uint32_t ep1_out : 1;
+    uint32_t ep2_in : 1;
+    uint32_t ep2_out : 1;
+    uint32_t ep3_in : 1;
+    uint32_t ep3_out : 1;
+    uint32_t ep4_in : 1;
+    uint32_t ep4_out : 1;
+    uint32_t ep5_in : 1;
+    uint32_t ep5_out : 1;
+    uint32_t ep6_in : 1;
+    uint32_t ep6_out : 1;
+    uint32_t ep7_in : 1;
+    uint32_t ep7_out : 1;
+    uint32_t ep8_in : 1;
+    uint32_t ep8_out : 1;
+    uint32_t ep9_in : 1;
+    uint32_t ep9_out : 1;
+    uint32_t ep10_in : 1;
+    uint32_t ep10_out : 1;
+    uint32_t ep11_in : 1;
+    uint32_t ep11_out : 1;
+    uint32_t ep12_in : 1;
+    uint32_t ep12_out : 1;
+    uint32_t ep13_in : 1;
+    uint32_t ep13_out : 1;
+    uint32_t ep14_in : 1;
+    uint32_t ep14_out : 1;
+    uint32_t ep15_in : 1;
+    uint32_t ep15_out : 1;
   };
   uint32_t raw;
 } s_usb_reg_buff_status_t;
@@ -164,11 +164,11 @@ typedef union {
 // 0x74
 typedef union {
   struct {
-    uint32_t : 28;
-    uint32_t softcon : 1;
-    uint32_t to_digital_pad : 1;
-    uint32_t to_extphy : 1;
     uint32_t to_phy : 1;
+    uint32_t to_extphy : 1;
+    uint32_t to_digital_pad : 1;
+    uint32_t softcon : 1;
+    uint32_t : 28;
   };
   uint32_t raw;
 } s_usb_reg_usb_muxing_t;
@@ -176,13 +176,13 @@ typedef union {
 // 0x78
 typedef union {
   struct {
-    uint32_t : 26;
-    uint32_t overcurr_detect_en : 1;
-    uint32_t overcurr_detect : 1;
-    uint32_t vbus_detect_override_en : 1;
-    uint32_t vbus_detect : 1;
-    uint32_t vbus_en_override_en : 1;
     uint32_t vbus_en : 1;
+    uint32_t vbus_en_override_en : 1;
+    uint32_t vbus_detect : 1;
+    uint32_t vbus_detect_override_en : 1;
+    uint32_t overcurr_detect : 1;
+    uint32_t overcurr_detect_en : 1;
+    uint32_t : 26;
   };
   uint32_t raw;
 } s_usb_reg_usb_pwr_t;
@@ -218,27 +218,27 @@ typedef union {
 // 0x98
 typedef union {
   struct {
-    uint32_t : 12;
-    uint32_t ep_stall_nak : 1;
-    uint32_t abort_done : 1;
-    uint32_t dev_sof : 1;
-    uint32_t setup_req : 1;
-    uint32_t dev_resume_from_host : 1;
-    uint32_t dev_suspend : 1;
-    uint32_t dev_conn_dis : 1;
-    uint32_t bus_reset : 1;
-    uint32_t vbus_detect : 1;
-    uint32_t stall : 1;
-    uint32_t error_crc : 1;
-    uint32_t error_bit_stuff : 1;
-    uint32_t error_rx_overflow : 1;
-    uint32_t error_rx_timeout : 1;
-    uint32_t error_data_seq : 1;
-    uint32_t buff_status : 1;
-    uint32_t trans_complete : 1;
-    uint32_t host_sof : 1;
-    uint32_t host_resume : 1;
     uint32_t host_conn_dis : 1;
+    uint32_t host_resume : 1;
+    uint32_t host_sof : 1;
+    uint32_t trans_complete : 1;
+    uint32_t buff_status : 1;
+    uint32_t error_data_seq : 1;
+    uint32_t error_rx_timeout : 1;
+    uint32_t error_rx_overflow : 1;
+    uint32_t error_bit_stuff : 1;
+    uint32_t error_crc : 1;
+    uint32_t stall : 1;
+    uint32_t vbus_detect : 1;
+    uint32_t bus_reset : 1;
+    uint32_t dev_conn_dis : 1;
+    uint32_t dev_suspend : 1;
+    uint32_t dev_resume_from_host : 1;
+    uint32_t setup_req : 1;
+    uint32_t dev_sof : 1;
+    uint32_t abort_done : 1;
+    uint32_t ep_stall_nak : 1;
+    uint32_t : 12;
   };
   uint32_t raw;
 } s_usb_reg_ints_t;

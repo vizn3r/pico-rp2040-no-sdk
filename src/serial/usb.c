@@ -13,66 +13,56 @@ static volatile uint8_t configured = 0;
 static volatile uint8_t pending_address = 0;
 
 void s_usb_init_blocking(void) {
-  __asm volatile("cpsie i");
-
-  // Start XOSC
-  *(volatile uint32_t *)0x4002400C = 47;       // STARTUP delay
-  *(volatile uint32_t *)0x40024000 = 0xFABAA0; // CTRL: enable
-  while (!(*(volatile uint32_t *)0x40024004 & 0x80000000))
+  *(volatile uint32_t *)0x40024000 = 0xAA0;
+  *(volatile uint32_t *)0x40024004 = 47;
+  while (!(*(volatile uint32_t *)0x4002400C & 0x80000000))
     ;
 
-  // Reset PLL_USB
-  *(volatile uint32_t *)0x4000E000 = (1 << 13); // Atomic set (assert reset)
-  *(volatile uint32_t *)0x4000F000 =
-      (1 << 13); // Atomic clear (release reset)  while (!(*(volatile uint32_t
-                 // *)0x4000C008 & (1 << 13)))
-  ;
+  HW_RESETS_RESET_CLR(HW_RESETS_RESET_OFFSET_PLL_USB);
+  while (!HW_RESETS_RESET_DONE_OK(HW_RESETS_RESET_OFFSET_PLL_USB))
+    ;
 
-  // PLL config
-  *(volatile uint32_t *)0x4002C004 = 0x29;
+  *(volatile uint32_t *)0x4002C008 = (1 << 5) | (1 << 8);
   *(volatile uint32_t *)0x4002C000 = 1;
-  *(volatile uint32_t *)0x4002C008 = 40;
-  *(volatile uint32_t *)0x4002C004 = 0x20;
-
+  *(volatile uint32_t *)0x4002C004 = 40;
+  *(volatile uint32_t *)0x4002C008 = 0;
   while (!(*(volatile uint32_t *)0x4002C000 & 0x80000000))
     ;
-
   *(volatile uint32_t *)0x4002C00C = (5 << 16) | (2 << 12);
-  *(volatile uint32_t *)0x4002C004 = 0;
 
-  // USB clock
-  *(volatile uint32_t *)0x40008058 =
-      (1 << 8); // DIV = 1 (integer part at bits 8+)
-  *(volatile uint32_t *)0x40008054 = (1 << 11); // ENABLE
+  *(volatile uint32_t *)0x4000805C = 0;
+  *(volatile uint32_t *)0x40008060 = (1 << 11);
 
-  // Unreset USB - use atomic clear register
-  *(volatile uint32_t *)0x4000F000 = (1 << 24); // RESETS atomic clear
-  while (!(*(volatile uint32_t *)0x4000C008 & (1 << 24)))
+  HW_RESETS_RESET_CLR(HW_RESETS_RESET_OFFSET_USBCTRL);
+  while (!HW_RESETS_RESET_DONE_OK(HW_RESETS_RESET_OFFSET_USBCTRL))
     ;
 
-  // Clear DPSRAM
   for (int i = 0; i < 4096; i += 4) {
     *(volatile uint32_t *)(S_USB_DPSRAM_BASE + i) = 0;
   }
 
-  // USB setup
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x40) = 0;
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x74) = (1 << 0) | (1 << 3);
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x78) = (1 << 2) | (1 << 3);
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x40) = 1;
+  S_USB_REG_MAIN_CTRL.raw = 0;
+  S_USB_REG_USB_MUXING.to_phy = 1;
+  S_USB_REG_USB_MUXING.softcon = 1; // ADDED
 
-  S_USB_DPSRAM_EP_IN_CTRL(1) = (1 << 31) | (3 << 26) | (0x140 >> 6);
-  S_USB_DPSRAM_EP_OUT_CTRL(2) = (1 << 31) | (2 << 26) | (0x180 >> 6);
-  S_USB_DPSRAM_EP_IN_CTRL(2) = (1 << 31) | (2 << 26) | (0x1C0 >> 6);
+  S_USB_REG_USB_PWR.vbus_detect = 1;
+  S_USB_REG_USB_PWR.vbus_detect_override_en = 1;
 
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x90) =
-      (1 << 16) | (1 << 4) | (1 << 12);
-  *(volatile uint32_t *)(S_USB_REGS_BASE + 0x4c) = (1 << 16);
+  S_USB_REG_MAIN_CTRL.controller_en = 1;
 
-  *(volatile uint32_t *)(S_USB_DPSRAM_BASE + 0x84) = 64;
-  *(volatile uint32_t *)(S_USB_DPSRAM_BASE + 0x1000 + 0x84) = (1 << 10);
+  while (!S_USB_REG_SIE_STATUS.vbus_detected)
+    ;
 
-  *(volatile uint32_t *)0xE000E100 = (1 << 5);
+  S_USB_REG_INTE.setup_req = 1;
+  S_USB_REG_INTE.buff_status = 1;
+  S_USB_REG_INTE.bus_reset = 1;
+
+  S_USB_REG_SIE_CTRL.pullup_en = 1;
+
+  S_USB_DPSRAM_EP_OUT_BUFF_CTRL(0) = 64 | (1 << 10); // ADDED
+
+  *(volatile uint32_t *)0xE000E100 |= (1 << 5);
+  __asm volatile("cpsie i"); // ADDED
 }
 
 void s_usb_irq_handle(void) {
@@ -84,7 +74,7 @@ void s_usb_irq_handle(void) {
     uint8_t desc_type;
     uint8_t desc_index;
 
-    volatile uint8_t *ep0_in_buf;
+    // volatile uint8_t *ep0_in_buf;
     uint16_t len;
 
     const uint8_t *str_desc;
@@ -235,7 +225,7 @@ void s_usb_cdc_send(const uint8_t *data, uint16_t len) {
 
 uint16_t s_usb_cdc_recv(uint8_t *data, uint16_t max_len) {
   volatile uint8_t *ep2_out_buf =
-      (volatile uint8_t *)(S_USB_DPSRAM_BASE + 0x140);
+      (volatile uint8_t *)(S_USB_DPSRAM_BASE + 0x180);
 
   uint16_t len = S_USB_DPSRAM_EP_OUT_BUFF_CTRL(2) & 0x3FF;
   if (len > max_len)
