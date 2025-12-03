@@ -6,13 +6,13 @@
 
 ### Why
 
-- Because my 'tistic brain wanted to do so. No SDKs, just RP2040 ~*and W25Q16JV*~ docs
+- Because my 'tistic brain wanted to do so. No SDKs, just RP2040 docs
 - Because it's fun
-- Because I wanna write a system, not a boring ~*REST API*~ LED blink on ATMega328p
+- Because I wanna write a system, not a boring LED blink on ATMega328p
 
 ### Current features:
 
-- ~*Not*~ Working QSPI Flash for XIP :D
+- Working QSPI Flash for XIP :D
 - LED blink
 - ...
 
