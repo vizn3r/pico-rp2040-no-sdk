@@ -65,7 +65,7 @@ typedef union {
     uint32_t sof_sync : 1;
     uint32_t sof_en : 1;
     uint32_t keep_alive_en : 1;
-    uint32_t vbuen : 1;
+    uint32_t vbus_en : 1;
     uint32_t resume : 1;
     uint32_t reset_bus : 1;
     uint32_t : 1;
@@ -89,13 +89,13 @@ typedef union {
 // 0x50
 typedef union {
   struct {
-    uint32_t vbudetected : 1;
+    uint32_t vbus_detected : 1;
     uint32_t : 1;
     uint32_t line_state : 1;
     uint32_t suspended : 1;
     uint32_t : 3;
     uint32_t speed : 1;
-    uint32_t vbuover_curr : 1;
+    uint32_t vbus_over_curr : 1;
     uint32_t resume : 1;
     uint32_t reserved : 1;
     uint32_t connected : 1;
@@ -178,10 +178,10 @@ typedef union {
 // 0x78
 typedef union {
   struct {
-    uint32_t vbuen : 1;
-    uint32_t vbuen_override_en : 1;
-    uint32_t vbudetect : 1;
-    uint32_t vbudetect_override_en : 1;
+    uint32_t vbus_en : 1;
+    uint32_t vbus_en_override_en : 1;
+    uint32_t vbus_detect : 1;
+    uint32_t vbus_detect_override_en : 1;
     uint32_t overcurr_detect : 1;
     uint32_t overcurr_detect_en : 1;
     uint32_t : 26;
@@ -203,7 +203,7 @@ typedef union {
     uint32_t error_bit_stuff : 1;
     uint32_t error_crc : 1;
     uint32_t stall : 1;
-    uint32_t vbudetect : 1;
+    uint32_t vbus_detect : 1;
     uint32_t bus_reset : 1;
     uint32_t dev_conn_dis : 1;
     uint32_t dev_suspend : 1;
@@ -231,7 +231,7 @@ typedef union {
     uint32_t error_bit_stuff : 1;
     uint32_t error_crc : 1;
     uint32_t stall : 1;
-    uint32_t vbudetect : 1;
+    uint32_t vbus_detect : 1;
     uint32_t bus_reset : 1;
     uint32_t dev_conn_dis : 1;
     uint32_t dev_suspend : 1;

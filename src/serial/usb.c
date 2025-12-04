@@ -1,7 +1,9 @@
 #include <hal/gpio.h>
+#include <reg/apb/clock.h>
 #include <reg/apb/pll.h>
 #include <reg/apb/resets.h>
 #include <reg/apb/xosc.h>
+#include <reg/ppb.h>
 #include <reg/sio.h>
 #include <reg/usbctrl.h>
 #include <serial/usb.h>
@@ -22,9 +24,9 @@ void usb_init_b(void) {
   __asm volatile("cpsie i");
 
   // Enable XOSC
-  *(volatile uint32_t *)0x40024000 = 0xAA0;
-  *(volatile uint32_t *)0x40024004 = 47;
-  while (!(*(volatile uint32_t *)0x4002400C & 0x80000000))
+  XOSC_REG_CTRL.raw = 0xAA0;
+  XOSC_REG_STATUS.raw = 47;
+  while (!(XOSC_REG_STARTUP.raw & 0x80000000))
     ;
   gpio_led_blink_b(1);
 
@@ -44,8 +46,8 @@ void usb_init_b(void) {
   PLL_USB_REG_PRIM.raw = (5 << 16) | (2 << 12);
 
   // Configure CLK_USB from PLL_USB (48MHz)
-  *(volatile uint32_t *)0x40008058 = (1 << 8);  // CLK_USB_DIV: divide by 1
-  *(volatile uint32_t *)0x40008054 = (1 << 11); // CLK_USB_CTRL: enable
+  CLOCK_REG_CLK_USB_DIV.raw = (1 << 8);
+  CLOCK_REG_CLK_USB_CTRL.raw = (1 << 11);
 
   // Bring USB controller out of reset
   RESETS_RESET_CLR(RESETS_RESET_OFFSET_USBCTRL);
@@ -62,13 +64,13 @@ void usb_init_b(void) {
   USBCTRL_REG_USB_MUXING.to_phy = 1;
   USBCTRL_REG_USB_MUXING.softcon = 1;
 
-  // USBCTRL_REG_USBCTRL_PWR.vbus_detect = 1;
-  // USBCTRL_REG_USBCTRL_PWR.vbus_detect_override_en = 1;
+  USBCTRL_REG_USB_PWR.vbus_detect = 1;
+  USBCTRL_REG_USB_PWR.vbus_detect_override_en = 1;
 
   USBCTRL_REG_MAIN_CTRL.controller_en = 1;
 
-  // while (!USBCTRL_REG_SIE_STATUS.vbus_detected)
-  //   ;
+  while (!USBCTRL_REG_SIE_STATUS.vbus_detected)
+    ;
 
   USBCTRL_REG_INTE.setup_req = 1;
   USBCTRL_REG_INTE.buff_status = 1;
@@ -78,7 +80,8 @@ void usb_init_b(void) {
 
   USBCTRL_DPSRAM_EP_OUT_BUFF_CTRL(0) = 64 | (1 << 10);
 
-  *(volatile uint32_t *)0xE000E100 |= (1 << 5);
+  PPB_REG_NVIC_ISER.raw |= (1 << 5);
+
   gpio_led_blink_fast_b(3);
 }
 
