@@ -1,14 +1,8 @@
 //
-// GPIO peripheral registers
+// RESETS_BASE
 //
 
 #pragma once
-
-#include <stdint.h>
-
-//
-// RESETS_BASE
-//
 
 #define RESETS_BASE(offset) (0x4000c000 + (offset))
 
@@ -56,41 +50,3 @@
 #define RESETS_RESET_OFFSET_DMA 2
 #define RESETS_RESET_OFFSET_BUSCTRL 1
 #define RESETS_RESET_OFFSET_ADC 0
-
-//
-// IO_BANK0_BASE
-//
-//
-#define IO_BANK0_BASE(offset) (0x40014000 + (offset))
-
-#define GPIO_STAT(gpio) *(volatile uint32_t *)IO_BANK0_BASE((gpio) * 8)
-#define GPIO_CTRL(gpio) *(volatile uint32_t *)IO_BANK0_BASE(((gpio) * 8) + 4)
-
-#define GPIO_CTRL_OEOVER 12
-#define OEOVER_NORMAL 0x0
-#define OEOVER_INVERT 0x1
-#define OEOVER_DISABLE 0x2
-#define OEOVER_ENABLE 0x3
-
-#define GPIO_CTRL_OUTOVER 8
-#define OUTOVER_NORMAL 0x0
-#define OUTOVER_INVERT 0x1
-#define OUTOVER_LOW 0x2
-#define OUTOVER_HIGH 0x3
-
-//
-// SIO_BASE
-//
-
-#define SIO_BASE(offset) (0xd0000000 + (offset))
-
-#define SIO_GPIO_OUT_SET(gpio)                                                 \
-  *(volatile uint32_t *)SIO_BASE(0x14) = (1 << (gpio))
-
-#define SIO_GPIO_OUT_CLR(gpio)                                                 \
-  *(volatile uint32_t *)SIO_BASE(0x18) = (1 << (gpio))
-
-#define SIO_GPIO_OE_SET(gpio)                                                  \
-  *(volatile uint32_t *)SIO_BASE(0x024) = (1 << (gpio))
-
-#define LED_GPIO 25

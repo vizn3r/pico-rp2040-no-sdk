@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-void usb_init_blocking(void);
+void usb_init_b(void);
 void usb_irq_handle(void);
 
 void usb_cdc_send(const uint8_t *data, uint16_t len);

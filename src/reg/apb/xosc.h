@@ -1,0 +1,5 @@
+//
+// XOSC_BASE
+//
+
+#define XOSC_BASE 0x40024000

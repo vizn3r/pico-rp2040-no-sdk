@@ -1,7 +1,9 @@
-#include "../regs/usb.h"
-#include "../hal/gpio.h"
-#include "../regs/gpio.h"
-#include "usb.h"
+#include <hal/gpio.h>
+#include <reg/apb/resets.h>
+#include <reg/sio.h>
+#include <reg/usbctrl.h>
+#include <serial/usb.h>
+
 #include <stdint.h>
 #include <sys/types.h>
 
@@ -13,20 +15,22 @@ static uint8_t ep2_in_data_toggle = 0;
 static volatile uint8_t configured = 0;
 static volatile uint8_t pending_address = 0;
 
-void usb_init_blocking(void) {
+void usb_init_b(void) {
+  gpio_led_blink_b(1);
   __asm volatile("cpsie i");
+
   // Enable XOSC
   *(volatile uint32_t *)0x40024000 = 0xAA0;
   *(volatile uint32_t *)0x40024004 = 47;
   while (!(*(volatile uint32_t *)0x4002400C & 0x80000000))
     ;
-
-  gpio_led_blink(1);
+  gpio_led_blink_b(1);
 
   // Configure PLL_USB
   RESETS_RESET_CLR(RESETS_RESET_OFFSET_PLL_USB);
   while (!RESETS_RESET_DONE_OK(RESETS_RESET_OFFSET_PLL_USB))
     ;
+  gpio_led_blink_b(1);
 
   *(volatile uint32_t *)0x4002C008 = (1 << 5) | (1 << 8);
   *(volatile uint32_t *)0x4002C000 = 1;
@@ -34,7 +38,7 @@ void usb_init_blocking(void) {
   *(volatile uint32_t *)0x4002C008 = 0;
   while (!(*(volatile uint32_t *)0x4002C000 & 0x80000000))
     ;
-  gpio_led_blink(1);
+  gpio_led_blink_b(1);
   *(volatile uint32_t *)0x4002C00C = (5 << 16) | (2 << 12);
 
   // Configure CLK_USB from PLL_USB (48MHz)
@@ -45,7 +49,7 @@ void usb_init_blocking(void) {
   RESETS_RESET_CLR(RESETS_RESET_OFFSET_USBCTRL);
   while (!RESETS_RESET_DONE_OK(RESETS_RESET_OFFSET_USBCTRL))
     ;
-  gpio_led_blink(1);
+  gpio_led_blink_b(1);
 
   // Clear DPSRAM
   for (int i = 0; i < 4096; i += 4) {
@@ -73,7 +77,7 @@ void usb_init_blocking(void) {
   USB_DPSRAM_EP_OUT_BUFF_CTRL(0) = 64 | (1 << 10);
 
   *(volatile uint32_t *)0xE000E100 |= (1 << 5);
-  gpio_led_blink_fast(3);
+  gpio_led_blink_fast_b(3);
 }
 
 void usb_irq_handle(void) {

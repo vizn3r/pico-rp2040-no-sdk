@@ -1,6 +1,7 @@
-#include "kernel.h"
-#include "../hal/gpio.h"
-#include "../serial/usb.h"
+#include <hal/gpio.h>
+#include <kernel/kernel.h>
+#include <serial/usb.h>
+
 #include <stdint.h>
 
 static int strlen(const char *s) {
@@ -11,11 +12,11 @@ static int strlen(const char *s) {
 }
 
 int kernel_main(void) {
-  gpio_enable_led();
+  gpio_enable_led_b();
 
-  gpio_led_blink_fast(3);
+  gpio_led_blink_fast_b(3);
 
-  usb_init_blocking();
+  usb_init_b();
   const char *data = "Hello world!";
   while (1) {
     for (volatile int i = 0; i < 1e6; i++)

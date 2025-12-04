@@ -21,7 +21,7 @@ set(CMAKE_ASM_FLAGS "${CPU_FLAGS}")
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/linker.ld")
 set(CMAKE_EXE_LINKER_FLAGS "-T ${LINKER_SCRIPT} -nostdlib -Wl,-Map=output.map")
 
-include_directories(src/regs)
+include_directories(src)
 add_subdirectory(src/kernel)
 add_subdirectory(src/serial)
 add_subdirectory(src/hal)
