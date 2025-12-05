@@ -30,7 +30,7 @@
 
 // USB registers bit definitions
 
-// 0x00
+// 0x00 - 0x3c
 typedef union {
   struct {
     uint32_t address : 7;
@@ -39,7 +39,7 @@ typedef union {
     uint32_t : 12;
   };
   uint32_t raw;
-} usb_addr_endp_t;
+} usbctrl_addr_endp_t;
 
 // 0x40
 typedef union {
@@ -49,7 +49,24 @@ typedef union {
     uint32_t : 30;
   };
   uint32_t raw;
-} usb_main_ctrl_t;
+} usbctrl_main_ctrl_t;
+
+typedef union {
+  struct {
+    uint32_t : 11;
+    uint32_t : 21;
+  };
+  uint32_t raw;
+} usbctrl_sof_wr_t;
+
+typedef union {
+  struct {
+    uint32_t : 11;
+    uint32_t : 21;
+  };
+  uint32_t raw;
+} usbctrl_sof_rd_t;
+;
 
 // 0x4c
 typedef union {
@@ -84,7 +101,7 @@ typedef union {
     uint32_t ep0_int_stall : 1;
   };
   uint32_t raw;
-} usb_sie_ctrl_t;
+} usbctrl_sie_ctrl_t;
 
 // 0x50
 typedef union {
@@ -113,7 +130,7 @@ typedef union {
     uint32_t data_seq_error : 1;
   };
   uint32_t raw;
-} usb_sie_status_t;
+} usbctrl_sie_status_t;
 
 // 0x54
 typedef union {
@@ -122,7 +139,7 @@ typedef union {
     uint32_t int_ep_active : 15;
     uint32_t : 16;
   };
-} usb_int_ep_ctrl_t;
+} usbctrl_int_ep_ctrl_t;
 
 // 0x58
 typedef union {
@@ -161,7 +178,178 @@ typedef union {
     uint32_t ep15_out : 1;
   };
   uint32_t raw;
-} usb_buff_status_t;
+} usbctrl_buff_status_t;
+
+typedef union {
+  struct {
+    uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t ep1_in : 1;
+    uint32_t ep1_out : 1;
+    uint32_t ep2_in : 1;
+    uint32_t ep2_out : 1;
+    uint32_t ep3_in : 1;
+    uint32_t ep3_out : 1;
+    uint32_t ep4_in : 1;
+    uint32_t ep4_out : 1;
+    uint32_t ep5_in : 1;
+    uint32_t ep5_out : 1;
+    uint32_t ep6_in : 1;
+    uint32_t ep6_out : 1;
+    uint32_t ep7_in : 1;
+    uint32_t ep7_out : 1;
+    uint32_t ep8_in : 1;
+    uint32_t ep8_out : 1;
+    uint32_t ep9_in : 1;
+    uint32_t ep9_out : 1;
+    uint32_t ep10_in : 1;
+    uint32_t ep10_out : 1;
+    uint32_t ep11_in : 1;
+    uint32_t ep11_out : 1;
+    uint32_t ep12_in : 1;
+    uint32_t ep12_out : 1;
+    uint32_t ep13_in : 1;
+    uint32_t ep13_out : 1;
+    uint32_t ep14_in : 1;
+    uint32_t ep14_out : 1;
+    uint32_t ep15_in : 1;
+    uint32_t ep15_out : 1;
+  };
+  uint32_t raw;
+} usbctrl_buff_cpu_should_handle_t;
+
+typedef union {
+  struct {
+    uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t ep1_in : 1;
+    uint32_t ep1_out : 1;
+    uint32_t ep2_in : 1;
+    uint32_t ep2_out : 1;
+    uint32_t ep3_in : 1;
+    uint32_t ep3_out : 1;
+    uint32_t ep4_in : 1;
+    uint32_t ep4_out : 1;
+    uint32_t ep5_in : 1;
+    uint32_t ep5_out : 1;
+    uint32_t ep6_in : 1;
+    uint32_t ep6_out : 1;
+    uint32_t ep7_in : 1;
+    uint32_t ep7_out : 1;
+    uint32_t ep8_in : 1;
+    uint32_t ep8_out : 1;
+    uint32_t ep9_in : 1;
+    uint32_t ep9_out : 1;
+    uint32_t ep10_in : 1;
+    uint32_t ep10_out : 1;
+    uint32_t ep11_in : 1;
+    uint32_t ep11_out : 1;
+    uint32_t ep12_in : 1;
+    uint32_t ep12_out : 1;
+    uint32_t ep13_in : 1;
+    uint32_t ep13_out : 1;
+    uint32_t ep14_in : 1;
+    uint32_t ep14_out : 1;
+    uint32_t ep15_in : 1;
+    uint32_t ep15_out : 1;
+  };
+  uint32_t raw;
+} usbctrl_ep_abort_t;
+
+typedef union {
+  struct {
+    uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t ep1_in : 1;
+    uint32_t ep1_out : 1;
+    uint32_t ep2_in : 1;
+    uint32_t ep2_out : 1;
+    uint32_t ep3_in : 1;
+    uint32_t ep3_out : 1;
+    uint32_t ep4_in : 1;
+    uint32_t ep4_out : 1;
+    uint32_t ep5_in : 1;
+    uint32_t ep5_out : 1;
+    uint32_t ep6_in : 1;
+    uint32_t ep6_out : 1;
+    uint32_t ep7_in : 1;
+    uint32_t ep7_out : 1;
+    uint32_t ep8_in : 1;
+    uint32_t ep8_out : 1;
+    uint32_t ep9_in : 1;
+    uint32_t ep9_out : 1;
+    uint32_t ep10_in : 1;
+    uint32_t ep10_out : 1;
+    uint32_t ep11_in : 1;
+    uint32_t ep11_out : 1;
+    uint32_t ep12_in : 1;
+    uint32_t ep12_out : 1;
+    uint32_t ep13_in : 1;
+    uint32_t ep13_out : 1;
+    uint32_t ep14_in : 1;
+    uint32_t ep14_out : 1;
+    uint32_t ep15_in : 1;
+    uint32_t ep15_out : 1;
+  };
+  uint32_t raw;
+} usbctrl_ep_abort_done_t;
+
+typedef union {
+  struct {
+    uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t : 30;
+  };
+  uint32_t raw;
+} usbctrl_ep_stall_arm_t;
+
+typedef union {
+  struct {
+    uint32_t delay_ls : 10;
+    uint32_t : 6;
+    uint32_t delay_fs : 10;
+    uint32_t : 6;
+  };
+  uint32_t raw;
+} usbctrl_nak_poll_t;
+
+typedef union {
+  struct {
+    uint32_t ep0_in : 1;
+    uint32_t ep0_out : 1;
+    uint32_t ep1_in : 1;
+    uint32_t ep1_out : 1;
+    uint32_t ep2_in : 1;
+    uint32_t ep2_out : 1;
+    uint32_t ep3_in : 1;
+    uint32_t ep3_out : 1;
+    uint32_t ep4_in : 1;
+    uint32_t ep4_out : 1;
+    uint32_t ep5_in : 1;
+    uint32_t ep5_out : 1;
+    uint32_t ep6_in : 1;
+    uint32_t ep6_out : 1;
+    uint32_t ep7_in : 1;
+    uint32_t ep7_out : 1;
+    uint32_t ep8_in : 1;
+    uint32_t ep8_out : 1;
+    uint32_t ep9_in : 1;
+    uint32_t ep9_out : 1;
+    uint32_t ep10_in : 1;
+    uint32_t ep10_out : 1;
+    uint32_t ep11_in : 1;
+    uint32_t ep11_out : 1;
+    uint32_t ep12_in : 1;
+    uint32_t ep12_out : 1;
+    uint32_t ep13_in : 1;
+    uint32_t ep13_out : 1;
+    uint32_t ep14_in : 1;
+    uint32_t ep14_out : 1;
+    uint32_t ep15_in : 1;
+    uint32_t ep15_out : 1;
+  };
+  uint32_t raw;
+} usbctrl_ep_status_nak_t;
 
 // 0x74
 typedef union {
@@ -173,7 +361,7 @@ typedef union {
     uint32_t : 28;
   };
   uint32_t raw;
-} usb_usb_muxing_t;
+} usbctrl_usb_muxing_t;
 
 // 0x78
 typedef union {
@@ -187,15 +375,76 @@ typedef union {
     uint32_t : 26;
   };
   uint32_t raw;
-} usb_usb_pwr_t;
+} usbctrl_usb_pwr_t;
 
-// 0x90
+typedef union {
+  struct {
+    uint32_t dp_pullup_hisel : 1;
+    uint32_t dp_pullup_en : 1;
+    uint32_t dp_pulldn_en : 1;
+    uint32_t : 1;
+    uint32_t dm_pullup_hisel : 1;
+    uint32_t dm_pullup_en : 1;
+    uint32_t dm_pulldn_en : 1;
+    uint32_t : 1;
+    uint32_t tx_dp_oe : 1;
+    uint32_t tx_dm_oe : 1;
+    uint32_t tx_dp : 1;
+    uint32_t tx_dm : 1;
+    uint32_t rx_pd : 1;
+    uint32_t tx_pd : 1;
+    uint32_t tx_fsslew : 1;
+    uint32_t tx_diffmode : 1;
+    uint32_t rx_dd : 1;
+    uint32_t rx_dp : 1;
+    uint32_t rx_dm : 1;
+    uint32_t dp_ovcn : 1;
+    uint32_t dm_ovcn : 1;
+    uint32_t dp_ovv : 1;
+    uint32_t dm_ovv : 1;
+    uint32_t : 9;
+  };
+  uint32_t raw;
+} usbctrl_usbphy_direct_t;
+
+typedef union {
+  struct {
+    uint32_t dp_pullup_hisel_override_en : 1;
+    uint32_t dm_pullup_hisel_override_en : 1;
+    uint32_t dp_pullup_en_override_en : 1;
+    uint32_t dp_pulldn_en_override_en : 1;
+    uint32_t dm_pulldn_en_override_en : 1;
+    uint32_t tx_dp_oe_override_en : 1;
+    uint32_t tx_dm_oe_override_en : 1;
+    uint32_t tx_dp_override_en : 1;
+    uint32_t tx_dm_override_en : 1;
+    uint32_t rx_pd_override_en : 1;
+    uint32_t tx_pd_override_en : 1;
+    uint32_t tx_fsslew_override_en : 1;
+    uint32_t dm_pullup_override_en : 1;
+    uint32_t : 2;
+    uint32_t tx_diffmode_override_en : 1;
+    uint32_t : 16;
+  };
+  uint32_t raw;
+} usbctrl_usbphy_direct_override_t;
+
+typedef union {
+  struct {
+    uint32_t dp_pulldn_trim : 5;
+    uint32_t : 3;
+    uint32_t dm_pulldn_trim : 5;
+    uint32_t : 19;
+  };
+  uint32_t raw;
+} usbctrl_usbphy_trim_t;
+
 typedef union {
   struct {
     uint32_t host_conn_dis : 1;
     uint32_t host_resume : 1;
     uint32_t host_sof : 1;
-    uint32_t trancomplete : 1;
+    uint32_t trans_complete : 1;
     uint32_t buff_status : 1;
     uint32_t error_data_seq : 1;
     uint32_t error_rx_timeout : 1;
@@ -215,15 +464,14 @@ typedef union {
     uint32_t : 12;
   };
   uint32_t raw;
-} usb_inte_t;
+} usbctrl_intr_t;
 
-// 0x98
 typedef union {
   struct {
     uint32_t host_conn_dis : 1;
     uint32_t host_resume : 1;
     uint32_t host_sof : 1;
-    uint32_t trancomplete : 1;
+    uint32_t trans_complete : 1;
     uint32_t buff_status : 1;
     uint32_t error_data_seq : 1;
     uint32_t error_rx_timeout : 1;
@@ -243,69 +491,132 @@ typedef union {
     uint32_t : 12;
   };
   uint32_t raw;
-} usb_ints_t;
+} usbctrl_inte_t;
+
+typedef union {
+  struct {
+    uint32_t host_conn_dis : 1;
+    uint32_t host_resume : 1;
+    uint32_t host_sof : 1;
+    uint32_t trans_complete : 1;
+    uint32_t buff_status : 1;
+    uint32_t error_data_seq : 1;
+    uint32_t error_rx_timeout : 1;
+    uint32_t error_rx_overflow : 1;
+    uint32_t error_bit_stuff : 1;
+    uint32_t error_crc : 1;
+    uint32_t stall : 1;
+    uint32_t vbus_detect : 1;
+    uint32_t bus_reset : 1;
+    uint32_t dev_conn_dis : 1;
+    uint32_t dev_suspend : 1;
+    uint32_t dev_resume_from_host : 1;
+    uint32_t setup_req : 1;
+    uint32_t dev_sof : 1;
+    uint32_t abort_done : 1;
+    uint32_t ep_stall_nak : 1;
+    uint32_t : 12;
+  };
+  uint32_t raw;
+} usbctrl_intf_t;
+
+typedef union {
+  struct {
+    uint32_t host_conn_dis : 1;
+    uint32_t host_resume : 1;
+    uint32_t host_sof : 1;
+    uint32_t trans_complete : 1;
+    uint32_t buff_status : 1;
+    uint32_t error_data_seq : 1;
+    uint32_t error_rx_timeout : 1;
+    uint32_t error_rx_overflow : 1;
+    uint32_t error_bit_stuff : 1;
+    uint32_t error_crc : 1;
+    uint32_t stall : 1;
+    uint32_t vbus_detect : 1;
+    uint32_t bus_reset : 1;
+    uint32_t dev_conn_dis : 1;
+    uint32_t dev_suspend : 1;
+    uint32_t dev_resume_from_host : 1;
+    uint32_t setup_req : 1;
+    uint32_t dev_sof : 1;
+    uint32_t abort_done : 1;
+    uint32_t ep_stall_nak : 1;
+    uint32_t : 12;
+  };
+  uint32_t raw;
+} usbctrl_ints_t;
 
 // USB registers
 #define USBCTRL_ADDR_ENDP                                                      \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x00))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x00))
 #define USBCTRL_ADDR_ENDP1                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x04))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x04))
 #define USBCTRL_ADDR_ENDP2                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x08))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x08))
 #define USBCTRL_ADDR_ENDP3                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x0c))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x0c))
 #define USBCTRL_ADDR_ENDP4                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x10))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x10))
 #define USBCTRL_ADDR_ENDP5                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x14))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x14))
 #define USBCTRL_ADDR_ENDP6                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x18))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x18))
 #define USBCTRL_ADDR_ENDP7                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x1c))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x1c))
 #define USBCTRL_ADDR_ENDP8                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x20))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x20))
 #define USBCTRL_ADDR_ENDP9                                                     \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x24))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x24))
 #define USBCTRL_ADDR_ENDP10                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x28))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x28))
 #define USBCTRL_ADDR_ENDP11                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x2c))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x2c))
 #define USBCTRL_ADDR_ENDP12                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x30))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x30))
 #define USBCTRL_ADDR_ENDP13                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x34))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x34))
 #define USBCTRL_ADDR_ENDP14                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x38))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x38))
 #define USBCTRL_ADDR_ENDP15                                                    \
-  (*(volatile usb_addr_endp_t *)(USBCTRL_REGS_BASE + 0x3c))
+  (*(volatile usbctrl_addr_endp_t *)(USBCTRL_REGS_BASE + 0x3c))
 #define USBCTRL_MAIN_CTRL                                                      \
-  (*(volatile usb_main_ctrl_t *)(USBCTRL_REGS_BASE + 0x40))
-#define USBCTRL_SOF_WR (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x44))
-#define USBCTRL_SOF_RD (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x48))
+  (*(volatile usbctrl_main_ctrl_t *)(USBCTRL_REGS_BASE + 0x40))
+#define USBCTRL_SOF_WR                                                         \
+  (*(volatile usbctrl_sof_wr_t *)(USBCTRL_REGS_BASE + 0x44))
+#define USBCTRL_SOF_RD                                                         \
+  (*(volatile usbctrl_sof_rd_t *)(USBCTRL_REGS_BASE + 0x48))
 #define USBCTRL_SIE_CTRL                                                       \
-  (*(volatile usb_sie_ctrl_t *)(USBCTRL_REGS_BASE + 0x4c))
+  (*(volatile usbctrl_sie_ctrl_t *)(USBCTRL_REGS_BASE + 0x4c))
 #define USBCTRL_SIE_STATUS                                                     \
-  (*(volatile usb_sie_status_t *)(USBCTRL_REGS_BASE + 0x50))
+  (*(volatile usbctrl_sie_status_t *)(USBCTRL_REGS_BASE + 0x50))
 #define USBCTRL_INT_EP_CTRL                                                    \
-  (*(volatile usb_int_ep_ctrl_t *)(USBCTRL_REGS_BASE + 0x54))
+  (*(volatile usbctrl_int_ep_ctrl_t *)(USBCTRL_REGS_BASE + 0x54))
 #define USBCTRL_BUFF_STATUS                                                    \
-  (*(volatile usb_buff_status_t *)(USBCTRL_REGS_BASE + 0x58))
+  (*(volatile usbctrl_buff_status_t *)(USBCTRL_REGS_BASE + 0x58))
 #define USBCTRL_BUFF_CPU_SHOULD_HANDLE                                         \
   (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x5c))
-#define USBCTRL_EP_ABORT (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x60))
-#define USBCTRL_EP_ABORT_DONE (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x64))
-#define USBCTRL_EP_STALL_ARM (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x68))
-#define USBCTRL_NAK_POLL (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x6c))
+#define USBCTRL_EP_ABORT                                                       \
+  (*(volatile usbctrl_ep_abort_t *)(USBCTRL_REGS_BASE + 0x60))
+#define USBCTRL_EP_ABORT_DONE                                                  \
+  (*(volatile usbctrl_ep_abort_done_t *)(USBCTRL_REGS_BASE + 0x64))
+#define USBCTRL_EP_STALL_ARM                                                   \
+  (*(volatile usbctrl_ep_stall_arm_t *)(USBCTRL_REGS_BASE + 0x68))
+#define USBCTRL_NAK_POLL                                                       \
+  (*(volatile usbctrl_nak_poll_t *)(USBCTRL_REGS_BASE + 0x6c))
 #define USBCTRL_EP_STATUSTALL_NAK                                              \
   (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x70))
 #define USBCTRL_USB_MUXING                                                     \
-  (*(volatile usb_usb_muxing_t *)(USBCTRL_REGS_BASE + 0x74))
-#define USBCTRL_USB_PWR (*(volatile usb_usb_pwr_t *)(USBCTRL_REGS_BASE + 0x78))
-#define USBCTRL_USBPHY_DIRECT (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x7c))
+  (*(volatile usbctrl_usb_muxing_t *)(USBCTRL_REGS_BASE + 0x74))
+#define USBCTRL_USB_PWR                                                        \
+  (*(volatile usbctrl_usb_pwr_t *)(USBCTRL_REGS_BASE + 0x78))
+#define USBCTRL_USBPHY_DIRECT                                                  \
+  (*(volatile usbctrl_usbphy_direct_t *)(USBCTRL_REGS_BASE + 0x7c))
 #define USBCTRL_USBPHY_DIRECT_OVERRIDE                                         \
   (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x80))
-#define USBCTRL_USBPHY_TRIM (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x84))
-#define USBCTRL_INTR (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x8c))
-#define USBCTRL_INTE (*(volatile usb_inte_t *)(USBCTRL_REGS_BASE + 0x90))
-#define USBCTRL_INTF (*(volatile uint32_t *)(USBCTRL_REGS_BASE + 0x94))
-#define USBCTRL_INTS (*(volatile usb_ints_t *)(USBCTRL_REGS_BASE + 0x98))
+#define USBCTRL_USBPHY_TRIM                                                    \
+  (*(volatile usbctrl_usbphy_trim_t *)(USBCTRL_REGS_BASE + 0x84))
+#define USBCTRL_INTR (*(volatile usbctrl_intr_t *)(USBCTRL_REGS_BASE + 0x8c))
+#define USBCTRL_INTE (*(volatile usbctrl_inte_t *)(USBCTRL_REGS_BASE + 0x90))
+#define USBCTRL_INTF (*(volatile usbctrl_intf_t *)(USBCTRL_REGS_BASE + 0x94))
+#define USBCTRL_INTS (*(volatile usbctrl_ints_t *)(USBCTRL_REGS_BASE + 0x98))

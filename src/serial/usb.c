@@ -55,10 +55,8 @@ void usb_init_b(void) {
   PLL_USB_PWR.postdivpd = 0;
   gpio_led_blink_b(1);
 
-  PLL_USB_PRIM.raw = (5 << 16) | (2 << 12);
-
   // Configure CLK_USB from PLL_USB (48MHz)
-  CLOCK_CLK_USB_DIV.raw = (1 << 8);
+  CLOCK_CLK_USB_DIV.integer = 1;
   CLOCK_CLK_USB_CTRL.raw = (1 << 11);
 
   // Bring USB controller out of reset
