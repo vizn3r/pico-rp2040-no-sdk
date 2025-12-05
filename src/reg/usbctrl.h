@@ -19,14 +19,48 @@
   (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + 0x0))
 
 #define USBCTRL_DPSRAM_EP_IN_CTRL(EP_NUM)                                      \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM * 8) + 0x08))
+  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x08))
 #define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM * 8) + 0xc))
+  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0xc))
 
 #define USBCTRL_DPSRAM_EP_IN_BUFF_CTRL(EP_NUM)                                 \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM * 8) + 0x80))
+  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x80))
 #define USBCTRL_DPSRAM_EP_OUT_BUFF_CTRL(EP_NUM)                                \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM * 8) + 0x84))
+  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x84))
+
+typedef union {
+  struct {
+    uint32_t buf_addr : 10;
+    uint32_t intr_on_nak : 1;
+    uint32_t intr_on_stall : 1;
+    uint32_t : 8;
+    uint32_t ep_type : 2;
+    uint32_t intr_per_double_buf : 1;
+    uint32_t int_per_tx_buf : 1;
+    uint32_t double_buf : 1;
+    uint32_t enable : 1;
+  };
+  uint32_t raw;
+} usb_ep_ctrl_t;
+
+typedef union {
+  struct {
+    uint32_t len0 : 10;
+    uint32_t available0 : 1;
+    uint32_t stall : 1;
+    uint32_t reset : 1;
+    uint32_t pid0 : 1;
+    uint32_t last0 : 1;
+    uint32_t full0 : 1;
+    uint32_t len1 : 10;
+    uint32_t available1 : 1;
+    uint32_t double_buf_offset : 2;
+    uint32_t pid1 : 1;
+    uint32_t last1 : 1;
+    uint32_t full1 : 1;
+  };
+  uint32_t raw;
+} usb_buf_ctrl_t;
 
 // USB registers bit definitions
 
