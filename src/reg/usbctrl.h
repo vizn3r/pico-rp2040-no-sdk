@@ -14,22 +14,9 @@
 #define USBCTRL_DPSRAM_BASE 0x50100000
 #define USBCTRL_REGS_BASE 0x50110000
 
-// DPSRAM layout
-#define USBCTRL_DPSRAM_SETUP_PACKET                                            \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + 0x0))
-
-#define USBCTRL_DPSRAM_EP_IN_CTRL(EP_NUM)                                      \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x08))
-#define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0xc))
-
-#define USBCTRL_DPSRAM_EP_IN_BUFF_CTRL(EP_NUM)                                 \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x80))
-#define USBCTRL_DPSRAM_EP_OUT_BUFF_CTRL(EP_NUM)                                \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + 0x84))
-
 typedef union {
   struct {
+    uint32_t : 6;
     uint32_t buf_addr : 10;
     uint32_t intr_on_nak : 1;
     uint32_t intr_on_stall : 1;
@@ -41,7 +28,7 @@ typedef union {
     uint32_t enable : 1;
   };
   uint32_t raw;
-} usb_ep_ctrl_t;
+} usbctrl_dpsram_ep_ctrl_t;
 
 typedef union {
   struct {
@@ -60,7 +47,25 @@ typedef union {
     uint32_t full1 : 1;
   };
   uint32_t raw;
-} usb_buf_ctrl_t;
+} usbctrl_dpsram_buf_ctrl_t;
+
+// DPSRAM layout
+#define USBCTRL_DPSRAM_SETUP_PACKET                                            \
+  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + 0x0))
+
+#define USBCTRL_DPSRAM_EP_IN_CTRL(EP_NUM)                                      \
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + \
+                                          0x08))
+#define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + \
+                                          0xc))
+
+#define USBCTRL_DPSRAM_EP_IN_BUFF_CTRL(EP_NUM)                                 \
+  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE +               \
+                                           (EP_NUM) * 8 + 0x80))
+#define USBCTRL_DPSRAM_EP_OUT_BUFF_CTRL(EP_NUM)                                \
+  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE +               \
+                                           (EP_NUM) * 8 + 0x84))
 
 // USB registers bit definitions
 
