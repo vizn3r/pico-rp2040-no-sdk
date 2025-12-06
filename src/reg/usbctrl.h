@@ -23,7 +23,7 @@ typedef union {
     uint32_t : 8;
     uint32_t ep_type : 2;
     uint32_t intr_per_double_buf : 1;
-    uint32_t int_per_tx_buf : 1;
+    uint32_t intr_per_buf : 1;
     uint32_t double_buf : 1;
     uint32_t enable : 1;
   };
@@ -54,11 +54,11 @@ typedef union {
   (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + 0x0))
 
 #define USBCTRL_DPSRAM_EP_IN_CTRL(EP_NUM)                                      \
-  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + \
-                                          0x08))
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE +                \
+                                          ((EP_NUM) - 1) * 8 + 0x08))
 #define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
-  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + (EP_NUM) * 8 + \
-                                          0xc))
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE +                \
+                                          ((EP_NUM) - 1) * 8 + 0xc))
 
 #define USBCTRL_DPSRAM_EP_IN_BUFF_CTRL(EP_NUM)                                 \
   (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE +               \

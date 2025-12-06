@@ -20,14 +20,14 @@ typedef struct {
   uint16_t wLength;
 } __attribute__((packed)) usb_setup_packet_t;
 
-extern uint8_t usb_cdc_recv_buff[64];
 extern uint16_t usb_cdc_recv_buff_len;
+extern uint8_t usb_cdc_recv_buff[64];
 
 static const uint8_t device_descriptor[] = {
     18,         // bLength
     0x01,       // bDescriptorType (Device)
     0x00, 0x02, // bcdUSB (USB 2.0)
-    0x02,       // bDeviceClass (CDC)
+    0x00,       // bDeviceClass
     0x00,       // bDeviceSubClass
     0x00,       // bDeviceProtocol
     64,         // bMaxPacketSize0

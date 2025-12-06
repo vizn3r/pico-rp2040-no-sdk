@@ -33,11 +33,11 @@ void gpio_led_blink_b(uint16_t n) {
 void gpio_led_blink_fast_b(uint16_t n) {
   for (volatile uint16_t i = 0; i < n; i++) {
     SIO_GPIO_OUT_SET(LED_GPIO);
-    for (volatile uint32_t i = 0; i < 20000; i++)
+    for (volatile uint32_t i = 0; i < 30000; i++)
       ;
 
     SIO_GPIO_OUT_CLR(LED_GPIO);
-    for (volatile uint32_t i = 0; i < 20000; i++)
+    for (volatile uint32_t i = 0; i < 30000; i++)
       ;
   }
 }

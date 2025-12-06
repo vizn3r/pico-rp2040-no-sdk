@@ -1,0 +1,35 @@
+References: https://github.com/Serialcomms/Raspberry-Pico-USB-Serial_BETA https://github.com/hathach/tinyusb https://github.com/raspberrypi/pico-sdk
+
+
+To start serial:
+USB init:
+reset usbctrl reset
+wait for reset
+clear dpsram
+set registers:
+usb:
+ctrl = controller_en == 1
+sie_ctrl = 0
+muxing = mux to phy
+inte = bus reset
+pwr = vbus detect, vbus detect override en
+
+insert usb dev:
+clear sie reg:
+usb_hardware_clear->sie_status = USB_SIE_STATUS_BUS_RESET_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_DATA_SEQ_ERROR_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_ACK_REC_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_RX_TIMEOUT_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_RX_OVERFLOW_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_BIT_STUFF_ERROR_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_CRC_ERROR_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_TRANS_COMPLETE_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_SETUP_REC_BITS;
+usb_hardware_clear->sie_status = USB_SIE_STATUS_SUSPENDED_BITS;
+enable interrupt
+set priority
+set sie upllup en(?):
+usb_hw->sie_ctrl |= USB_SIE_CTRL_PULLUP_EN_BITS;
+
+wait for 333 ms(???)
+
