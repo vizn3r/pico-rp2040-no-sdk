@@ -30,6 +30,10 @@ typedef union {
   uint32_t raw;
 } usbctrl_dpsram_ep_ctrl_t;
 
+#define USBCTRL_DPSRAM_EP_TYPE_CTRL 0
+#define USBCTRL_DPSRAM_EP_TYPE_BULK 1
+#define USBCTRL_DPSRAM_EP_TYPE_INTR 2
+
 typedef union {
   struct {
     uint32_t len0 : 10;
@@ -49,23 +53,117 @@ typedef union {
   uint32_t raw;
 } usbctrl_dpsram_buf_ctrl_t;
 
+typedef union {
+  struct {
+    union {
+      struct {
+        uint8_t recipient : 5;
+        uint8_t type : 2;
+        uint8_t dir : 1;
+      };
+      uint8_t raw;
+    } bmRequestType;
+    uint8_t bRequest;
+    union {
+      struct {
+        uint8_t descriptor_index;
+        uint8_t descriptor_type;
+      };
+      uint16_t raw;
+    } wValue;
+    union {
+      struct {
+        uint8_t interface_number;
+        uint8_t reserved;
+      };
+      uint16_t language_id;
+      uint16_t raw;
+    } wIndex;
+    uint16_t wLength;
+  } __attribute__((packed));
+  uint64_t raw;
+} usbctrl_dpsram_setup_t;
+
+// bmRequestType.recipient
+#define USBCTRL_SETUP_RECIPIENT_DEVICE 0
+#define USBCTRL_SETUP_RECIPIENT_INTERFACE 1
+#define USBCTRL_SETUP_RECIPIENT_ENDPOINT 2
+#define USBCTRL_SETUP_RECIPIENT_OTHER 3
+
+// bmRequestType.type
+#define USBCTRL_SETUP_TYPE_STANDARD 0
+#define USBCTRL_SETUP_TYPE_CLASS 1
+#define USBCTRL_SETUP_TYPE_VENDOR 2
+
+// bmRequestType.dir
+#define USBCTRL_SETUP_DIR_HOST_TO_DEVICE 0
+#define USBCTRL_SETUP_DIR_DEVICE_TO_HOST 1
+
+// bRequest (standard)
+#define USBCTRL_SETUP_REQ_GET_STATUS 0x00
+#define USBCTRL_SETUP_REQ_CLEAR_FEATURE 0x01
+#define USBCTRL_SETUP_REQ_SET_FEATURE 0x03
+#define USBCTRL_SETUP_REQ_SET_ADDRESS 0x05
+#define USBCTRL_SETUP_REQ_GET_DESCRIPTOR 0x06
+#define USBCTRL_SETUP_REQ_SET_DESCRIPTOR 0x07
+#define USBCTRL_SETUP_REQ_GET_CONFIGURATION 0x08
+#define USBCTRL_SETUP_REQ_SET_CONFIGURATION 0x09
+#define USBCTRL_SETUP_REQ_GET_INTERFACE 0x0A
+#define USBCTRL_SETUP_REQ_SET_INTERFACE 0x0B
+#define USBCTRL_SETUP_REQ_SYNCH_FRAME 0x0C
+
+// bRequest (CDC class)
+#define USBCTRL_SETUP_REQ_CDC_SET_LINE_CODING 0x20
+#define USBCTRL_SETUP_REQ_CDC_GET_LINE_CODING 0x21
+#define USBCTRL_SETUP_REQ_CDC_SET_CONTROL_LINE_STATE 0x22
+
+// wValue.descriptor_type
+#define USBCTRL_SETUP_DESC_TYPE_DEVICE 0x01
+#define USBCTRL_SETUP_DESC_TYPE_CONFIGURATION 0x02
+#define USBCTRL_SETUP_DESC_TYPE_STRING 0x03
+#define USBCTRL_SETUP_DESC_TYPE_INTERFACE 0x04
+#define USBCTRL_SETUP_DESC_TYPE_ENDPOINT 0x05
+
 // DPSRAM layout
-#define USBCTRL_DPSRAM_SETUP_PACKET                                            \
-  (*(volatile uint32_t *)(USBCTRL_DPSRAM_BASE + 0x0))
 
+// Setup packet (0x000)
+#define USBCTRL_DPSRAM_SETUP                                                   \
+  (*(volatile usbctrl_dpsram_setup_t *)(USBCTRL_DPSRAM_BASE + 0x0))
+
+// Endpoint control registers (0x008-0x07F)
+// EP0 has NO control registers
 #define USBCTRL_DPSRAM_EP_IN_CTRL(EP_NUM)                                      \
-  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE +                \
-                                          ((EP_NUM) - 1) * 8 + 0x08))
-#define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
-  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE +                \
-                                          ((EP_NUM) - 1) * 8 + 0xc))
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + 0x000 +        \
+                                          ((EP_NUM) * 8)))
 
+#define USBCTRL_DPSRAM_EP_OUT_CTRL(EP_NUM)                                     \
+  (*(volatile usbctrl_dpsram_ep_ctrl_t *)(USBCTRL_DPSRAM_BASE + 0x004 +        \
+                                          ((EP_NUM) * 8)))
+
+// Buffer control registers (0x080-0x0FF)
 #define USBCTRL_DPSRAM_EP_IN_BUFF_CTRL(EP_NUM)                                 \
-  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE +               \
-                                           (EP_NUM) * 8 + 0x80))
+  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE + 0x080 +       \
+                                           ((EP_NUM) * 8)))
+
 #define USBCTRL_DPSRAM_EP_OUT_BUFF_CTRL(EP_NUM)                                \
-  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE +               \
-                                           (EP_NUM) * 8 + 0x84))
+  (*(volatile usbctrl_dpsram_buf_ctrl_t *)(USBCTRL_DPSRAM_BASE + 0x084 +       \
+                                           ((EP_NUM) * 8)))
+
+// EP0 uses 0x100 (shared IN/OUT)
+// EP1 IN uses 0x140 (optional EP0 buffer 1 space)
+// From 0x180: sequential 128-byte blocks (64 OUT + 64 IN) per endpoint
+
+#define USBCTRL_DPSRAM_EP_IN_BUF(EP_NUM)                                       \
+  ((volatile uint8_t *)(USBCTRL_DPSRAM_BASE +                                  \
+                        ((EP_NUM) == 0 ? 0x100                                 \
+                         : (EP_NUM) == 1                                       \
+                             ? 0x140                                           \
+                             : (0x180 + (((EP_NUM) - 2) * 128) + 64))))
+
+#define USBCTRL_DPSRAM_EP_OUT_BUF(EP_NUM)                                      \
+  ((volatile uint8_t *)(USBCTRL_DPSRAM_BASE +                                  \
+                        ((EP_NUM) == 0 ? 0x100                                 \
+                                       : (0x180 + (((EP_NUM) - 2) * 128)))))
 
 // USB registers bit definitions
 

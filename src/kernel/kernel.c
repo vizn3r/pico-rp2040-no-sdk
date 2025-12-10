@@ -1,27 +1,35 @@
 #include <hal/gpio.h>
 #include <kernel/kernel.h>
+#include <reg/usbctrl.h>
 #include <serial/usb.h>
 
 #include <stdint.h>
 
-static int strlen(const char *s) {
-  int len = 0;
-  while (s[len])
-    len++;
-  return len;
-}
+// static int strlen(const char *s) {
+//   int len = 0;
+//   while (s[len])
+//     len++;
+//   return len;
+// }
 
 int kernel_main(void) {
   gpio_enable_led_b();
 
-  gpio_led_blink_fast_b(3);
+  // gpio_led_blink_fast_b(3);
 
   usb_init_b();
-  const char *data = "Hello world!";
+  // const char *data = "Hello world!";
   while (1) {
-    for (volatile int i = 0; i < 1e6; i++)
+    if (USBCTRL_SIE_STATUS.setup_rec) {
+      gpio_led_blink_fast_b(5);         // Different pattern
+      USBCTRL_SIE_STATUS.setup_rec = 1; // Clear it
+    }
+
+    for (volatile int i = 0; i < 100000; i++)
       ;
-    usb_cdc_send((const uint8_t *)data, strlen(data));
+    // for (volatile int i = 0; i < 1e6; i++)
+    //   ;
+    // usb_cdc_send((const uint8_t *)data, strlen(data));
   }
 
   return 0;
